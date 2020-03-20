@@ -1,0 +1,23 @@
+---
+
+- name: Check if podman is installed
+  shell: 
+    cmd: "{{ PODMAN_BIN }} --version"
+    executable: /bin/bash
+  register: stat_podman
+
+- name: Fail if {{ PODMAN_BIN }} is not available
+  assert:
+    that: 
+      - stat_podman.rc == 0
+    fail_msg: "Could not query podman version, probably not installed"
+    success_msg: "{{ PODMAN_BIN }} query successful: {{ stat_podman.stdout }}"
+
+- name: Fail if DOCKER_NAME is not defined
+  assert:
+    that: 
+      - DOCKER_NAME is defined
+    fail_msg: "Variable DOCKER_NAME must be defined"
+    success_msg: "Variable DOCKER_NAME is defined: {{ DOCKER_NAME }}"
+
+
